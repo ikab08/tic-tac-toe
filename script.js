@@ -15,8 +15,10 @@ const Gameboard = ( ()=> {
 		return true;
 	}
 
+	const reset = () => createBoard();
+
 	createBoard();					
 
 	// closure : only return what we want to be public
-	return { getBoard, placeMark };
+	return { getBoard, placeMark, reset };
 })();
