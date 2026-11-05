@@ -95,6 +95,7 @@ const DisplayController = (() => {
 		const board = Gameboard.getBoard();
 			cells.forEach((cell, i) => {
 			cell.textContent = board[i];
+			cell.dataset.mark = board[i];
 		});
 	}
 		
