@@ -3,7 +3,7 @@ A Tic Tac Toe game you can play in your browser, with game logic completely sepa
 
 **[Online demo](https://ikab08.github.io/tic-tac-toe/)**
 
-![Screenshot of the game](./screenshot.png)
+![Screenshot of the game](assets/screenshot.png)
 
 ## Features
 
