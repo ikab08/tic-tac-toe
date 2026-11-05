@@ -92,10 +92,10 @@ const DisplayController = (() => {
 
 	const render = () => {
 		const cells = document.querySelectorAll(".cell");
-		const board = Gameboard.getBoard();
+		const gboard = Gameboard.getBoard();
 			cells.forEach((cell, i) => {
-			cell.textContent = board[i];
-			cell.dataset.mark = board[i];
+			cell.textContent = gboard[i];
+			cell.dataset.mark = gboard[i];
 		});
 	}
 		
