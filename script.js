@@ -89,19 +89,11 @@ const GameController = (() => {
 	return { playRound, getCurrentPlayer, newGame};
 })();
 
-// console display
-const printBoard = () => {
-	const b = Gameboard.getBoard().map((cell) => cell || " ");
-	console.log(`${b[0]} | ${b[1]} | ${b[2]}\n${b[3]} | ${b[4]} | ${b[5]}\n${b[6]} | ${b[7]} | ${b[8]}`);
+const board = document.querySelector("#board");
+for (let i = 0; i < 9; i++) {
+	const btn = document.createElement("button");
+	btn.classList.add("cell");
+  btn.dataset.index = i;
+	board.appendChild(btn);
 }
 
-// test
-console.log(GameController.playRound(0)); 
-console.log(GameController.playRound(0)); 
-console.log(GameController.playRound(3)); 
-console.log(GameController.playRound(1)); 
-console.log(GameController.playRound(4)); 
-console.log(GameController.playRound(2)); 
-console.log(GameController.playRound(5)); 
-
-printBoard();
