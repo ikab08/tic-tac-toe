@@ -30,14 +30,78 @@ const Player = (name, mark) => {
 	return {getName, getMark};
 }
 
-const player1 = Player("Alice", "X");
-const player2 = Player("Bob", "O");
 
+// Gamecontroller
 
-console.log(player1.getName());                        // "Alice"
-console.log(player2.getMark());                        // "O"
-console.log(Gameboard.placeMark(4, player1.getMark())); // true
-console.log(Gameboard.placeMark(4, player2.getMark())); // false : case taken
-console.log(Gameboard.placeMark(5, player2.getMark())); // true
-console.log(Gameboard.getBoard());                			
-// Gameboard.reset();
+const GameController = (() => {
+	const players = [Player("Player 1", "X"), Player("Player 2", "O")];
+	let currentPlayer = players[0];
+	let gameOver = false;
+
+	const winingCombos = [
+		[0, 1, 2], [3, 4, 5], [6, 7, 8],
+		[0, 3, 6], [1, 4, 7], [2, 5, 8],
+		[0, 4, 8], [2, 4, 6],
+	];
+
+	const checkWin = (mark) => {
+		const board = Gameboard.getBoard();
+		return winingCombos.some((combo) => 
+			combo.every((index) => board[index] === mark)
+		);
+	};
+
+	const isDraw = () => Gameboard.getBoard().every((cell) => cell !== "");
+
+	const switchPlayer = () => {
+		currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+	}
+
+	const playRound = (index) => {
+		if (gameOver) return { status: "Game over"};
+		
+		if (!Gameboard.placeMark(index, currentPlayer.getMark())) {
+			return { status: "Not allow"};
+		}
+
+		if (checkWin(currentPlayer.getMark())) {
+			gameOver = true;
+			return { status: "Win", winner: currentPlayer.getName()}
+		}
+
+		if (isDraw()) {
+			gameOver = true;
+			return { status: "Draw"};
+		}
+
+		switchPlayer();
+		return { status: "Continue", next: currentPlayer.getName()};
+	};
+
+	const getCurrentPlayer = () => currentPlayer;
+
+	const newGame = () => {
+		Gameboard.reset();
+		currentPlayer = players[0];
+		gameOver = false
+	}
+
+	return { playRound, getCurrentPlayer, newGame};
+})();
+
+// console display
+const printBoard = () => {
+	const b = Gameboard.getBoard().map((cell) => cell || " ");
+	console.log(`${b[0]} | ${b[1]} | ${b[2]}\n${b[3]} | ${b[4]} | ${b[5]}\n${b[6]} | ${b[7]} | ${b[8]}`);
+}
+
+// test
+console.log(GameController.playRound(0)); 
+console.log(GameController.playRound(0)); 
+console.log(GameController.playRound(3)); 
+console.log(GameController.playRound(1)); 
+console.log(GameController.playRound(4)); 
+console.log(GameController.playRound(2)); 
+console.log(GameController.playRound(5)); 
+
+printBoard();
