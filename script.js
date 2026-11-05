@@ -23,15 +23,11 @@ const Gameboard = ( ()=> {
 	return { getBoard, placeMark, reset };
 })();
 
-
 const Player = (name, mark) => {
 	const getName = () => name;
 	const getMark = () => mark;
 	return {getName, getMark};
 }
-
-
-// Gamecontroller
 
 const GameController = (() => {
 	const players = [Player("Player 1", "X"), Player("Player 2", "O")];
@@ -89,11 +85,66 @@ const GameController = (() => {
 	return { playRound, getCurrentPlayer, newGame};
 })();
 
-const board = document.querySelector("#board");
-for (let i = 0; i < 9; i++) {
-	const btn = document.createElement("button");
-	btn.classList.add("cell");
-  btn.dataset.index = i;
-	board.appendChild(btn);
-}
+const DisplayController = (() => {
+	const board = document.querySelector("#board");
+	const msg = document.querySelector("#msg");
+	const restartBtn = document.querySelector("#restart");
 
+	const render = () => {
+		const cells = document.querySelectorAll(".cell");
+		const board = Gameboard.getBoard();
+			cells.forEach((cell, i) => {
+			cell.textContent = board[i];
+		});
+	}
+		
+	const handleClick = (e) => {
+		const cell = e.target.closest(".cell");
+		if (!cell) return;
+
+		const index = Number(cell.dataset.index);
+
+		const result = GameController.playRound(index);
+		render();
+		
+		switch (result.status) {
+			case "Continue":
+			msg.textContent = `${result.next}'s turn`;
+			break;
+			case "Win":
+			msg.textContent = `${result.winner} wins !`;
+			break;
+			case "Draw":
+			msg.textContent = "Draw !";
+			break;
+			case "Not allow":
+			msg.textContent = "Case taken, replay !";
+			break;
+			case "Game over":
+			msg.textContent = "Game Over, restart !";
+			break;
+		}
+	};
+
+	const init = () => {
+		for (let i = 0; i < 9; i++) {
+			const btn = document.createElement("button");
+			btn.classList.add("cell");
+			btn.dataset.index = i;
+			board.appendChild(btn);
+		}
+		board.addEventListener("click", handleClick);
+		
+		restartBtn.addEventListener("click", () => {
+			GameController.newGame();
+			render();
+			msg.textContent = "Player 1's turn";
+		});
+
+		render();
+	}
+
+	return { init };
+})();
+
+DisplayController.init();
