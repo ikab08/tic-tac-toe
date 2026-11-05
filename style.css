@@ -11,7 +11,7 @@ body {
 }
 
 section {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .heading-section {
@@ -22,6 +22,11 @@ section {
 .heading-section div {
 	display: flex;
 	justify-content: space-evenly;
+}
+
+.info-section {
+  font-weight: bold;
+  color: #1f91d3;
 }
 
 .board-section {
